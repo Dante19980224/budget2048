@@ -1,0 +1,107 @@
+2048 instructions
+
+We are using a list of 16 numbers to map the 4x4 grid
+the 0th number of the list is the one at the top left corner
+the 1st number of the list is the one to the right of the 0th number
+...
+and the 15th number is the one at the bottom right corner
+Visually, it's something like the following:
+|0 |1 |2 |3 |
+|4 |5 |6 |7 |
+|8 |9 |10|11|
+|12|13|14|15|
+
+
+
+Exercises:
+  
+  STEP 1
+  Moving up/down/left/right uses the same algorithm, just in different directions.
+  Furthermore, when moving down for example, the columns are independent from each other.
+  So, instead of writing a function that moves all 4 columns/rows at once, we break it down into a function that only moves 1 row/col.
+  Let's analyse the process of moving 1 column DOWN. Consider the following examples(0 would be an empty block in the actual game):
+  |0|     |0|         |0|     |0|         |2|     |0|
+  |0| ->  |0|         |2| ->  |0|         |2| ->  |0|
+  |2|     |0|         |0|     |0|         |0|     |0|
+  |2|     |4|         |2|     |4|         |0|     |4|
+  Apparently, different arrangements of two 0s and two 2s all yield the same outcome, which is one 4 at the bottom, and three 0s on top of the 4.
+  Here is another set of examples:
+  |0|     |0|         |2|     |0|         |2|     |0|         |2|     |0|
+  |2| ->  |2|         |0| ->  |2|         |4| ->  |2|         |4| ->  |2|
+  |4|     |4|         |4|     |4|         |0|     |4|         |8|     |4|
+  |8|     |8|         |8|     |8|         |8|     |8|         |0|     |8|
+  If you change the order of 2, 4 and 8, the outcome would be different.
+  As long as the order of non-zero numbers stay the same, the outcome would stay the same.
+  What we can conclude from this is that the positions of 0s do NOT matter.
+  So when we implement the "move" function, it would be ideal to NOT consider the number 0 whatsoever.
+  
+  Here are some functions that would help us achieve the goal of ignoring the number 0
+
+let rec rm0 lst 
+--This function removes all the 0s from a list of 4 numbers
+
+let rec collapse lst =
+--This function takes a list of numbers and does the 2048 algorithm
+--Think of these lists as rows in the actual game, and we are moving left
+--examples: [2;2] -> [4]     [2;4;8] -> [2;4;8]    [4;4;4;4] -> [8;8]
+
+let rec pack lst =
+--Now that we have made the move, we need to add 0s to the end of the list until the list is of length 4
+--examples: [4] -> [4;0;0;0]     [2;4;8] -> [2;4;8;0]    [8;8] -> [4;4;0;0]
+
+let move lst =
+--Use the last 3 functions as helper functions to implement this function,
+--so that given a list that looks something like [4;4;8;2], return [8;8;2;0]
+
+let rec count_score lst = 
+--count the score of a move
+--which is equivalent to the sum of all newly combined numbers
+--examples: [2;2] -> 4     [2;4;8] -> 0(none of the numbers combined)    [4;4;4;4] -> 16(8+8)
+
+let c_s lst =
+--Use some of the functions you have implemented as helper functions to implement this function,
+--so that given a list that looks something like [4;4;8;2], return 8
+
+let rec spe_combine l1 l2 l3 l4 = 
+--This function might be useful later onto piece 4 lists of columns into the full 4x4 grid
+--produce list that looks like
+   [nth l1 0; nth l2 0; nth l3 0; nth l4 0; 
+    nth l1 1; nth l2 1; nth l3 1; nth l4 1; 
+    nth l1 2; nth l2 2; nth l3 2; nth l4 2; 
+    nth l1 3; nth l2 3; nth l3 3; nth l4 3]
+
+let step {points = p; cells = lst} dir = 
+--given the current level and the direction, return the next level after moving in the given direction once.
+--update the score(points) and the numbers in the grid(cells)
+
+
+  STEP2
+  Everytime a successful move is made, a new number is added randomly to an empty spot in the grid
+
+let rand_new_num () =
+--Randomly generate a new number. In this game, there is a 1/50 chance for a 4, 49/50 chance for a 2
+
+let rec count0 lst = 
+--given the list of all 16 numbers, find the amount of the number 0 in the 4x4 grid
+
+let rand_pick0 n =
+--given the amount of the number 0 in the 4x4 grid
+--then randomly select one of the 0s
+
+let rec insert_rand lst n =
+--given the list of all 16 numbers, replace the nth 0 with a random new number
+
+  STEP3
+  connect the algorithms to the gui
+
+let end_state {points=p; cells = cs} =
+--technically there is no win or lose state
+--the game ends when you cannot make any moves
+
+let match_grid lst coor =
+--match each number in the list to a coordinate
+
+let myits i  =
+--convert an integer to a string
+--This is used to print the number in the actual game
+--we do not print the number 0, so given the number 0, return an empty string or equivalent
